@@ -82,8 +82,8 @@ public class EventDetailActivity extends BaseActivity {
     ImageView ivEdit;
     @BindView(R.id.chb_is_important)
     CheckBox chbIsImportant;
-    @BindView(R.id.scroll_view)
-    ScrollView scrollView;
+    //@BindView(R.id.scroll_view)
+    //ScrollView scrollView;
 
 
     @Override
@@ -251,13 +251,13 @@ public class EventDetailActivity extends BaseActivity {
         return PendingIntent.getService(this, 0x001, intent, PendingIntent.FLAG_UPDATE_CURRENT);
     }
 
-    @OnClick(R.id.scroll_view)
-    public void scrollViewClick(View view) {
-        if (isAddEvent || isEditEvent) {
-            //打开软键盘
-            setEditTextReadOnly(edContent, false);
-        }
-    }
+//    @OnClick(R.id.scroll_view)
+//    public void scrollViewClick(View view) {
+//        if (isAddEvent || isEditEvent) {
+//            //打开软键盘
+//            setEditTextReadOnly(edContent, false);
+//        }
+//    }
 
     @NonNull
     private Event buildEvent() {

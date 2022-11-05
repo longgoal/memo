@@ -103,4 +103,6 @@
     <string name="clock_event_msg_template">您有事件：%1$s，请记得去完成！</string>
     <string name="remind_time_deprecated">提醒时间无效，请重新选择。</string>
     <string name="invalid_remind_time_format">提醒时间格式错误，请重新选择。</string>
+    <string name="alarm_date">提醒时间:&#160;</string>
+    <string name="alarm_date_splite">\n</string>
 </resources>

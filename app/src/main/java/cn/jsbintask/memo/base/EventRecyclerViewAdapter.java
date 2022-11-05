@@ -103,7 +103,7 @@ public class EventRecyclerViewAdapter extends RecyclerView.Adapter<EventRecycler
                 holder.tvTitle.setTypeface(Typeface.defaultFromStyle(Typeface.NORMAL));
             }
         }
-        holder.tvTitle.setText(event.getmTitle());
+        holder.tvTitle.setText(event.getmTitle() + mContext.getResources().getString(R.string.alarm_date_splite)+mContext.getResources().getString(R.string.alarm_date)+event.getmRemindTime());
 
         holder.getItemView().setOnClickListener(new View.OnClickListener() {
             @Override
