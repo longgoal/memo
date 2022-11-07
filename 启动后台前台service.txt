@@ -1,0 +1,61 @@
+Not allowed to start service Intent
+https://www.jianshu.com/p/fbea95cf9453
+使用startForegroundService，此方法会在状态栏显示通知
+// 启动服务的地方
+if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+    context.startForegroundService(new Intent(context, MyService.class));
+} else {
+    context.startService(new Intent(context, MyService.class));
+}
+
+// 在MyService中
+ 
+@Override
+public void onCreate() {
+    super.onCreate();
+ 
+    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        NotificationChannel channel = null;
+        channel = new NotificationChannel(CHANNEL_ID_STRING, getString(R.string.app_name), NotificationManager.IMPORTANCE_HIGH);
+        notificationManager.createNotificationChannel(channel);
+        Notification notification = new Notification.Builder(getApplicationContext(), CHANNEL_ID_STRING).build();
+        startForeground(1, notification);
+    }
+ 
+}
+MediaPlayer 播放铃声的方法汇总
+https://blog.csdn.net/Zackratos/article/details/53379157
+MediaPlayer 播放铃声的方法汇总
+    public static void playSystemRing(Context context,int position) {
+        final AudioManager audioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
+        RingtoneManager ringtoneManager = new RingtoneManager(context);
+        ringtoneManager.setType(RingtoneManager.TYPE_ALARM);
+        ringtoneManager.getCursor();
+        Uri ringUri = ringtoneManager.getRingtoneUri(position);
+ 
+        audioManager.setStreamVolume(AudioManager.STREAM_ALARM, 7, AudioManager.ADJUST_SAME);
+        MediaPlayer mediaPlayer = new MediaPlayer();
+        mediaPlayer.reset();
+        try {
+            mediaPlayer.setDataSource(context, ringUri);
+            mediaPlayer.setAudioStreamType(AudioManager.STREAM_ALARM);
+            mediaPlayer.prepare();
+            mediaPlayer.start();
+            mediaPlayer.setLooping(true);
+ 
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    
+锁屏上显示Activity
+http://t.zoukankan.com/shaweng-p-4396277.html
+
+@Override
+protected void onCreate(Bundle savedInstanceState) {  
+    super.onCreate(savedInstanceState);
+    getWindow().addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED
+        | WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON);
+    ...
+}    

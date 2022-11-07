@@ -3,13 +3,19 @@ package cn.jsbintask.memo.ui.activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.media.AudioManager;
 import android.media.MediaPlayer;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
+
+import java.io.IOException;
 
 import cn.jsbintask.memo.R;
 import cn.jsbintask.memo.base.BaseActivity;
@@ -45,10 +51,14 @@ public class ClockActivity extends BaseActivity {
 
     @Override
     protected void initView() {
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED
+                | WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON);
     }
 
+
     private void clock() {
-        mediaPlayer.start();
+        //mediaPlayer.start();
+        playSystemRing(this,0);
         long[] pattern = new long[]{1500, 1000};
         mVibrator.vibrate(pattern, 0);
         //获取自定义布局
@@ -77,7 +87,7 @@ public class ClockActivity extends BaseActivity {
 
     @Override
     protected void initData() {
-        mediaPlayer = MediaPlayer.create(getApplicationContext(), R.raw.clock);
+        //mediaPlayer = MediaPlayer.create(getApplicationContext(), R.raw.clock);
         mVibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
         Intent intent = getIntent();
         event = getIntent().getParcelableExtra(ClockService.EXTRA_EVENT);
@@ -85,6 +95,29 @@ public class ClockActivity extends BaseActivity {
             finish();
         }
     }
+
+    private void playSystemRing(Context context,int position) {
+        final AudioManager audioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
+        RingtoneManager ringtoneManager = new RingtoneManager(context);
+        ringtoneManager.setType(RingtoneManager.TYPE_ALARM);
+        ringtoneManager.getCursor();
+        Uri ringUri = ringtoneManager.getRingtoneUri(position);
+
+        audioManager.setStreamVolume(AudioManager.STREAM_ALARM, 7, AudioManager.ADJUST_SAME);
+        mediaPlayer = new MediaPlayer();
+        mediaPlayer.reset();
+        try {
+            mediaPlayer.setDataSource(context, ringUri);
+            mediaPlayer.setAudioStreamType(AudioManager.STREAM_ALARM);
+            mediaPlayer.prepare();
+            mediaPlayer.start();
+            mediaPlayer.setLooping(true);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 
     @Override
     protected void onNewIntent(Intent intent) {
