@@ -9,6 +9,7 @@ import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Vibrator;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
@@ -33,6 +34,7 @@ import cn.jsbintask.memo.util.AlertDialogUtil;
 public class ClockActivity extends BaseActivity {
     private static final String TAG = "ClockActivity";
     public static final String EXTRA_CLOCK_EVENT = "clock.event";
+
     //闹铃
     private MediaPlayer mediaPlayer;
     //震动
@@ -43,6 +45,7 @@ public class ClockActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
     }
 
     @Override
@@ -51,16 +54,17 @@ public class ClockActivity extends BaseActivity {
 
     @Override
     protected void initView() {
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED
-                | WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON);
+        Log.d(TAG,"initView");
+//        getWindow().addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED
+//                | WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON);
     }
 
 
     private void clock() {
-        //mediaPlayer.start();
-        playSystemRing(this,0);
-        long[] pattern = new long[]{1500, 1000};
-        mVibrator.vibrate(pattern, 0);
+        mediaPlayer.start();
+        //playSystemRing(this,0);
+        //long[] pattern = new long[]{1500, 1000};
+        //mVibrator.vibrate(pattern, 0);
         //获取自定义布局
         View inflate = LayoutInflater.from(this).inflate(R.layout.dialog_alarm_layout, null);
         TextView textView = inflate.findViewById(R.id.tv_event);
@@ -70,7 +74,10 @@ public class ClockActivity extends BaseActivity {
         btnConfirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Log.d(TAG,"close dialog");
                 mediaPlayer.stop();
+                //mediaPlayer.reset();
+                //mediaPlayer.stop();
                 mVibrator.cancel();
                 alertDialog.dismiss();
                 finish();
@@ -87,7 +94,7 @@ public class ClockActivity extends BaseActivity {
 
     @Override
     protected void initData() {
-        //mediaPlayer = MediaPlayer.create(getApplicationContext(), R.raw.clock);
+        mediaPlayer = MediaPlayer.create(getApplicationContext(), R.raw.clock);
         mVibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
         Intent intent = getIntent();
         event = getIntent().getParcelableExtra(ClockService.EXTRA_EVENT);
@@ -111,7 +118,7 @@ public class ClockActivity extends BaseActivity {
             mediaPlayer.setAudioStreamType(AudioManager.STREAM_ALARM);
             mediaPlayer.prepare();
             mediaPlayer.start();
-            mediaPlayer.setLooping(true);
+            mediaPlayer.setLooping(false);
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -127,6 +134,9 @@ public class ClockActivity extends BaseActivity {
 
     @Override
     public int getContentView() {
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED
+                | WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON|WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD);
+
         return R.layout.activity_clock;
     }
 }

@@ -45,6 +45,16 @@ public class ClockService extends Service {
             notificationManager.createNotificationChannel(channel);
             Notification notification = new Notification.Builder(getApplicationContext(), getString(R.string.app_name)).build();
             startForeground(1, notification);
+        } else {
+            NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+            Notification notification = new Notification.Builder(this)
+                    .setContentTitle(getString(R.string.app_name))
+                    .setContentText(getString(R.string.app_name))
+                    .setSmallIcon(R.drawable.ic_logo)
+                    //.SetContentIntent(BuildIntentToShowMainActivity())
+                    //.SetOngoing(true)
+                    .build();
+            startForeground(1,notification);
         }
 
     }
