@@ -46,6 +46,7 @@ public class ClockManager {
      */
     public void addAlarm(PendingIntent pendingIntent, Date performTime) {
         cancelAlarm(pendingIntent);
-        getAlarmManager().set(AlarmManager.RTC_WAKEUP, performTime.getTime(), pendingIntent);
+        //getAlarmManager().set(AlarmManager.RTC_WAKEUP, performTime.getTime(), pendingIntent);
+        getAlarmManager().setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, performTime.getTime(), pendingIntent);
     }
 }

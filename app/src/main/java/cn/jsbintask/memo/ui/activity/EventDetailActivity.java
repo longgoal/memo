@@ -9,6 +9,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.DatePicker;
@@ -57,6 +58,7 @@ public class EventDetailActivity extends BaseActivity {
     public static final String EXTRA_IS_EDIT_EVENT = "extra.is.edit.event";
     public static final String EXTRA_EVENT_DATA = "extra.event.data";
     public static final String EXTRA_IS_ADD_EVENT = "extra.is.create.event";
+    public static final String TAG = "EventDetailActivity";
     //从主屏进来的操作是不是编辑操作
     private boolean isEditEvent;
     //从主屏进来的操作是不是添加操作
@@ -231,6 +233,7 @@ public class EventDetailActivity extends BaseActivity {
                     event.setmId(mEventManager.getLatestEventId());
                 }
                 //添加闹钟
+                Log.d(TAG,"date = "+DateTimeUtil.str2Date(event.getmRemindTime()));
                 mClockManager.addAlarm(buildIntent(event.getmId()), DateTimeUtil.str2Date(event.getmRemindTime()));
                 mEventManager.flushData();
                 Intent intent = new Intent();
@@ -275,6 +278,7 @@ public class EventDetailActivity extends BaseActivity {
             event.setmCreatedTime(((Event) getIntent().getParcelableExtra(EXTRA_EVENT_DATA)).getmCreatedTime());
         }
         event.setmRemindTime(tvRemindTime.getText().toString());
+        Log.d(TAG,""+tvRemindTime.getText().toString());
         event.setmTitle(edTitle.getText().toString());
         event.setmIsImportant(chbIsImportant.isChecked() ? Constants.EventFlag.IMPORTANT : Constants.EventFlag.NORMAL);
         event.setmContent(edContent.getText().toString());
